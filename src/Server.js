@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Serve static files from the "dist" directory (one level up from src)
+// Serve static files from the "dist" directory
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // Handle SPA fallback (for React router, etc.)
