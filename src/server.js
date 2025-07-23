@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Needed to replace __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -12,8 +11,8 @@ const port = process.env.PORT || 3000;
 // Serve static files from the "dist" directory
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-// Handle SPA fallback (for React Router, etc.)
-app.get('*', (req, res) => {
+// Catch-all route for SPA (React Router)
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
