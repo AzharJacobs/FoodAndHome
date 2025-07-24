@@ -5,6 +5,7 @@ import { UserInfo, MealOption } from '../types';
 interface IngredientsPageProps {
   userInfo: UserInfo;
   selectedMeals: MealOption[];
+  generatedMealPlan: any;
   onBack: () => void;
 }
 
@@ -19,7 +20,7 @@ interface IngredientsByCategory {
   [category: string]: Ingredient[];
 }
 
-export default function IngredientsPage({ userInfo, selectedMeals, onBack }: IngredientsPageProps) {
+export default function IngredientsPage({ userInfo, selectedMeals, generatedMealPlan, onBack }: IngredientsPageProps) {
   const [ingredients, setIngredients] = useState<IngredientsByCategory>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,15 +39,27 @@ export default function IngredientsPage({ userInfo, selectedMeals, onBack }: Ing
         throw new Error('OpenAI API key not found. Please add VITE_OPENAI_API_KEY to your .env file.');
       }
 
-      const mealNames = selectedMeals.map(meal => meal.name).join(', ');
+      // Get meal names from the generated meal plan instead of selected meals
+      const allMeals: string[] = [];
+      if (generatedMealPlan && generatedMealPlan.days) {
+        generatedMealPlan.days.forEach((day: any) => {
+          Object.values(day.meals).forEach((meal: any) => {
+            if (meal && !allMeals.includes(meal)) {
+              allMeals.push(meal);
+            }
+          });
+        });
+      }
       
-      const prompt = `Create a comprehensive shopping list for these meals: ${mealNames}
+      const mealNames = allMeals.length > 0 ? allMeals.join(', ') : selectedMeals.map(meal => meal.name).join(', ');
+      
+      const prompt = `Create a comprehensive shopping list for a 7-day meal plan with these meals: ${mealNames}
 
       Consider:
       - Serving size for ${userInfo.age}-year-old ${userInfo.gender}
       - Diet type: ${userInfo.dietType}
       - Budget: ${userInfo.budget}
-      - Plan for 7 days
+      - This is for a full week meal plan
 
       Please provide a JSON response with ingredients organized by category:
       {
@@ -165,6 +178,13 @@ export default function IngredientsPage({ userInfo, selectedMeals, onBack }: Ing
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
+        <div className="text-center mb-4">
+          <img 
+            src="/Food-Home-logo-2-1.png" 
+            alt="Food & Home" 
+            className="h-10 mx-auto"
+          />
+        </div>
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}

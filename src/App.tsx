@@ -13,6 +13,7 @@ function App() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [startDay, setStartDay] = useState<string>('');
   const [selectedMeals, setSelectedMeals] = useState<MealOption[]>([]);
+  const [generatedMealPlan, setGeneratedMealPlan] = useState<any>(null);
 
   const handleBasicInfoNext = (data: UserInfo) => {
     setUserInfo(data);
@@ -26,6 +27,7 @@ function App() {
 
   const handleMealSelectionNext = (meals: MealOption[]) => {
     setSelectedMeals(meals);
+    setGeneratedMealPlan(null); // Reset meal plan when meals change
     setCurrentStep('generated-plan');
   };
 
@@ -47,7 +49,7 @@ function App() {
   };
 
   const handleRegenerate = () => {
-    // This will trigger a re-render of the GeneratedPlan component
+    setGeneratedMealPlan(null); // Clear existing plan to force regeneration
     setCurrentStep('generated-plan');
   };
 
@@ -80,6 +82,8 @@ function App() {
         <GeneratedPlan 
           userInfo={userInfo}
           selectedMeals={selectedMeals}
+          generatedMealPlan={generatedMealPlan}
+          setGeneratedMealPlan={setGeneratedMealPlan}
           onBack={handleBack}
           onRegenerate={handleRegenerate}
           onViewIngredients={handleViewIngredients}
@@ -90,6 +94,7 @@ function App() {
         <IngredientsPage 
           userInfo={userInfo}
           selectedMeals={selectedMeals}
+          generatedMealPlan={generatedMealPlan}
           onBack={handleBack}
         />
       )}

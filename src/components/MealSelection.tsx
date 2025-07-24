@@ -106,6 +106,14 @@ export default function MealSelection({ onNext, onBack, userDailyMeals }: MealSe
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+      <div className="text-center mb-6">
+        <img 
+          src="/Food-Home-logo-2-1.png" 
+          alt="Food & Home" 
+          className="h-12 mx-auto"
+        />
+      </div>
+      
       <div className="flex items-center mb-8">
         <button
           onClick={onBack}

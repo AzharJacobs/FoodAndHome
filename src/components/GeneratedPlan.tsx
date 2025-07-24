@@ -7,30 +7,26 @@ import html2canvas from 'html2canvas';
 interface GeneratedPlanProps {
   userInfo: UserInfo;
   selectedMeals: MealOption[];
+  generatedMealPlan: GeneratedMealPlan | null;
+  setGeneratedMealPlan: (plan: GeneratedMealPlan | null) => void;
   onBack: () => void;
   onRegenerate: () => void;
   onViewIngredients: () => void;
 }
 
-export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegenerate, onViewIngredients }: GeneratedPlanProps) {
-  const [mealPlan, setMealPlan] = useState<GeneratedMealPlan | null>(null);
+export default function GeneratedPlan({ userInfo, selectedMeals, generatedMealPlan, setGeneratedMealPlan, onBack, onRegenerate, onViewIngredients }: GeneratedPlanProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const mealPlanRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    generateMealPlan();
-  }, []);
-
-  useEffect(() => {
-    // Auto-download PDF when meal plan is generated
-    if (mealPlan && !loading && !error) {
-      setTimeout(() => {
-        downloadPDF();
-      }, 1000); // Small delay to ensure rendering is complete
+    if (generatedMealPlan) {
+      setLoading(false);
+    } else {
+      generateMealPlan();
     }
-  }, [mealPlan, loading, error]);
+  }, []);
 
   const generateMealPlan = async () => {
     setLoading(true);
@@ -105,7 +101,7 @@ export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegen
       const data = await response.json();
       const mealPlanData = JSON.parse(data.choices[0].message.content);
       
-      setMealPlan(mealPlanData);
+      setGeneratedMealPlan(mealPlanData);
     } catch (error) {
       console.error('Error generating meal plan:', error);
       setError(error instanceof Error ? error.message : 'Failed to generate meal plan');
@@ -115,7 +111,7 @@ export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegen
   };
 
   const downloadPDF = async () => {
-    if (!mealPlan || !mealPlanRef.current) return;
+    if (!generatedMealPlan || !mealPlanRef.current) return;
     
     setIsDownloading(true);
     try {
@@ -220,12 +216,19 @@ export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegen
     );
   }
 
-  if (!mealPlan) return null;
+  if (!generatedMealPlan) return null;
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
+        <div className="text-center mb-4">
+          <img 
+            src="/Food-Home-logo-2-1.png" 
+            alt="Food & Home" 
+            className="h-10 mx-auto"
+          />
+        </div>
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
@@ -268,19 +271,19 @@ export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegen
           </h2>
           <div className="grid grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-black">{mealPlan.nutritionInfo.totalCalories}</div>
+              <div className="text-2xl font-bold text-black">{generatedMealPlan.nutritionInfo.totalCalories}</div>
               <div className="text-sm text-gray-600">Calories</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-black">{mealPlan.nutritionInfo.protein}g</div>
+              <div className="text-2xl font-bold text-black">{generatedMealPlan.nutritionInfo.protein}g</div>
               <div className="text-sm text-gray-600">Protein</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-black">{mealPlan.nutritionInfo.carbs}g</div>
+              <div className="text-2xl font-bold text-black">{generatedMealPlan.nutritionInfo.carbs}g</div>
               <div className="text-sm text-gray-600">Carbs</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-black">{mealPlan.nutritionInfo.fat}g</div>
+              <div className="text-2xl font-bold text-black">{generatedMealPlan.nutritionInfo.fat}g</div>
               <div className="text-sm text-gray-600">Fat</div>
             </div>
           </div>
@@ -288,7 +291,7 @@ export default function GeneratedPlan({ userInfo, selectedMeals, onBack, onRegen
 
         {/* Weekly Plan - Styled like your image */}
         <div className="space-y-8">
-          {mealPlan.days.map((day, index) => (
+          {generatedMealPlan.days.map((day, index) => (
             <div key={index} className="border-b border-gray-200 pb-6 last:border-b-0">
               <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
                 <Calendar className="w-6 h-6" />
