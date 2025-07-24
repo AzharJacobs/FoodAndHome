@@ -100,7 +100,12 @@ export default function GeneratedPlan({ userInfo, selectedMeals, generatedMealPl
       }
 
       const data = await response.json();
-      const mealPlanData = JSON.parse(data.choices[0].message.content);
+      // Sanitize AI response to remove markdown code fences or extra text
+      function extractJsonFromResponse(response: string): string {
+        return response.replace(/```json/g, '').replace(/```/g, '').trim();
+      }
+      const sanitizedContent = extractJsonFromResponse(data.choices[0].message.content);
+      const mealPlanData = JSON.parse(sanitizedContent);
       
       setGeneratedMealPlan(mealPlanData);
     } catch (error) {

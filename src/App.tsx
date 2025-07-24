@@ -28,7 +28,7 @@ function App() {
     setMealOptionsError(null);
     try {
       const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      const prompt = `Given the following user profile, recommend 6 breakfast, 6 lunch, 6 dinner, and 6 snack meal options as a JSON array of objects (with id, name, image, and category fields). User profile: ${JSON.stringify(data)}. Only return the array, no explanation.`;
+      const prompt = `Given the following user profile, recommend 3 breakfast, 3 lunch, 3 dinner, and 3 snack meal options as a JSON array of objects (with id, name, image, and category fields). User profile: ${JSON.stringify(data)}. Only return the array, no explanation.`;
       const res = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
