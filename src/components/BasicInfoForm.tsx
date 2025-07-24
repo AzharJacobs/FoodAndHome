@@ -4,9 +4,10 @@ import { ChevronRight } from 'lucide-react';
 
 interface BasicInfoFormProps {
   onNext: (data: UserInfo) => void;
+  loading?: boolean;
 }
 
-export default function BasicInfoForm({ onNext }: BasicInfoFormProps) {
+export default function BasicInfoForm({ onNext, loading }: BasicInfoFormProps) {
   const [formData, setFormData] = useState<UserInfo>({
     gender: 'male',
     age: 30,
@@ -43,6 +44,13 @@ export default function BasicInfoForm({ onNext }: BasicInfoFormProps) {
     }));
   };
 
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center text-lg font-semibold">
+        Generating personalized meal options...
+      </div>
+    );
+  }
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
       <div className="text-center mb-8">
@@ -232,9 +240,9 @@ export default function BasicInfoForm({ onNext }: BasicInfoFormProps) {
             >
               <option value="anything">Anything</option>
               <option value="vegetarian">Vegetarian</option>
-              <option value="vegan">Vegan</option>
+              <option value="vegan">Carnivore</option>
               <option value="keto">Keto</option>
-              <option value="paleo">Paleo</option>
+              <option value="paleo">Balanced</option>
             </select>
           </div>
           <div>

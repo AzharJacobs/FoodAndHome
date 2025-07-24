@@ -36,7 +36,7 @@ function App() {
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "gpt-3.5-turbo",
           messages: [{ role: "user", content: prompt }],
           temperature: 0.7,
         }),
@@ -111,7 +111,7 @@ function App() {
           element={
             <>
               {currentStep === 'basic-info' && (
-                <BasicInfoForm onNext={handleBasicInfoNext} />
+                <BasicInfoForm onNext={handleBasicInfoNext} loading={mealOptionsLoading} />
               )}
 
               {currentStep === 'day-selection' && (
