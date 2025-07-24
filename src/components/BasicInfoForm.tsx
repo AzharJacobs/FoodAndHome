@@ -239,10 +239,10 @@ export default function BasicInfoForm({ onNext, loading }: BasicInfoFormProps) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
             >
               <option value="anything">Anything</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="vegan">Carnivore</option>
-              <option value="keto">Keto</option>
-              <option value="paleo">Balanced</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Carnivore">Carnivore</option>
+              <option value="Keto">Keto</option>
+              <option value="Balanced">Balanced</option>
             </select>
           </div>
           <div>
