@@ -20,6 +20,16 @@ export default function DaySelection({ onNext, onBack }: DaySelectionProps) {
   ];
 
   return (
+    <div className="max-w-2xl mx-auto">
+            {/* Image container above the form */}
+            <div className="mb-8 text-center">
+        <img 
+          src="/Images/Food-Home-Logo-2-1.png" 
+          alt="Meal planning illustration" 
+          className="w-full max-w-md mx-auto rounded-2xl shadow-lg object-cover"
+          // style={{ height: '100px'}}
+        />
+      </div>
     <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
       <div className="flex items-center mb-8">
         <button
@@ -61,6 +71,7 @@ export default function DaySelection({ onNext, onBack }: DaySelectionProps) {
         Continue to Meal Selection
         <ChevronRight className="w-5 h-5" />
       </button>
+    </div>
     </div>
   );
 }

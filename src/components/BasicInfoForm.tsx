@@ -48,7 +48,7 @@ export default function BasicInfoForm({ onNext }: BasicInfoFormProps) {
       {/* Image container above the form */}
       <div className="mb-8 text-center">
         <img 
-          src="/src/Images/Food-Home-Logo-2-1.png" 
+          src="/Images/Food-Home-Logo-2-1.png" 
           alt="Meal planning illustration" 
           className="w-full max-w-md mx-auto rounded-2xl shadow-lg object-cover"
           // style={{ height: '100px'}}
