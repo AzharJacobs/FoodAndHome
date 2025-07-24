@@ -6,43 +6,12 @@ interface MealSelectionProps {
   onNext: (selectedMeals: MealOption[]) => void;
   onBack: () => void;
   userDailyMeals: string[];
+  mealOptions: MealOption[];
+  loading: boolean;
+  error: string | null;
 }
 
-const mealOptions: MealOption[] = [
-  // Breakfast options
-  { id: 'b1', name: 'Overnight Oats with Berries', image: 'https://images.pexels.com/photos/704971/pexels-photo-704971.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-  { id: 'b2', name: 'Avocado Toast with Eggs', image: 'https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-  { id: 'b3', name: 'Greek Yogurt Parfait', image: 'https://images.pexels.com/photos/1098592/pexels-photo-1098592.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-  { id: 'b4', name: 'Protein Pancakes', image: 'https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-  { id: 'b5', name: 'Smoothie Bowl', image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-  { id: 'b6', name: 'Veggie Scramble', image: 'https://images.pexels.com/photos/824635/pexels-photo-824635.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'breakfast' },
-
-  // Lunch options
-  { id: 'l1', name: 'Grilled Chicken Salad', image: 'https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-  { id: 'l2', name: 'Quinoa Buddha Bowl', image: 'https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-  { id: 'l3', name: 'Turkey Club Wrap', image: 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-  { id: 'l4', name: 'Veggie Stir Fry', image: 'https://images.pexels.com/photos/1640772/pexels-photo-1640772.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-  { id: 'l5', name: 'Mediterranean Wrap', image: 'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-  { id: 'l6', name: 'Soup & Salad Combo', image: 'https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'lunch' },
-
-  // Dinner options
-  { id: 'd1', name: 'Grilled Salmon with Vegetables', image: 'https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-  { id: 'd2', name: 'Lean Beef Stir Fry', image: 'https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-  { id: 'd3', name: 'Chicken Breast with Sweet Potato', image: 'https://images.pexels.com/photos/106343/pexels-photo-106343.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-  { id: 'd4', name: 'Vegetarian Pasta', image: 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-  { id: 'd5', name: 'Turkey Meatballs', image: 'https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-  { id: 'd6', name: 'Grilled Chicken Thighs', image: 'https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'dinner' },
-
-  // Snack options
-  { id: 's1', name: 'Mixed Nuts', image: 'https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-  { id: 's2', name: 'Greek Yogurt with Berries', image: 'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-  { id: 's3', name: 'Protein Bar', image: 'https://images.pexels.com/photos/209206/pexels-photo-209206.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-  { id: 's4', name: 'Apple with Peanut Butter', image: 'https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-  { id: 's5', name: 'Veggie Sticks with Hummus', image: 'https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-  { id: 's6', name: 'Protein Smoothie', image: 'https://images.pexels.com/photos/775032/pexels-photo-775032.jpeg?auto=compress&cs=tinysrgb&w=300', category: 'snack' },
-];
-
-export default function MealSelection({ onNext, onBack, userDailyMeals }: MealSelectionProps) {
+export default function MealSelection({ onNext, onBack, userDailyMeals, mealOptions, loading, error }: MealSelectionProps) {
   const [selectedMeals, setSelectedMeals] = useState<MealOption[]>([]);
 
   const toggleMeal = (meal: MealOption) => {
@@ -63,6 +32,7 @@ export default function MealSelection({ onNext, onBack, userDailyMeals }: MealSe
     }
     
     const categoryMeals = mealOptions.filter(meal => meal.category === category);
+    if (categoryMeals.length === 0) return null;
     const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
 
     return (
@@ -103,6 +73,22 @@ export default function MealSelection({ onNext, onBack, userDailyMeals }: MealSe
       </div>
     );
   };
+
+  // Show loading or error states
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center text-lg font-semibold">
+        Generating personalized meal options...
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center text-lg text-red-600 font-semibold">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8">

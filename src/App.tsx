@@ -17,11 +17,53 @@ function App() {
   const [startDay, setStartDay] = useState<string>('');
   const [selectedMeals, setSelectedMeals] = useState<MealOption[]>([]);
   const [generatedMealPlan, setGeneratedMealPlan] = useState<any>(null);
+  const [aiMealOptions, setAiMealOptions] = useState<MealOption[] | null>(null);
+  const [mealOptionsLoading, setMealOptionsLoading] = useState(false);
+  const [mealOptionsError, setMealOptionsError] = useState<string | null>(null);
 
-  const handleBasicInfoNext = (data: UserInfo) => {
+  // Fetch AI meal options after basic info submit
+  const handleBasicInfoNext = async (data: UserInfo) => {
     setUserInfo(data);
-    setCurrentStep('day-selection');
+    setMealOptionsLoading(true);
+    setMealOptionsError(null);
+    try {
+      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+      const prompt = `Given the following user profile, recommend 6 breakfast, 6 lunch, 6 dinner, and 6 snack meal options as a JSON array of objects (with id, name, image, and category fields). User profile: ${JSON.stringify(data)}. Only return the array, no explanation.`;
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+        }),
+      });
+      const aiData = await res.json();
+      const content = aiData.choices?.[0]?.message?.content;
+      let parsed: MealOption[] = [];
+      try {
+        parsed = JSON.parse(content);
+      } catch (err) {
+        // Try to extract JSON from text
+        const jsonMatch = content.match(/\[.*\]/s);
+        if (jsonMatch) {
+          parsed = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error("Could not parse AI meal options response");
+        }
+      }
+      setAiMealOptions(parsed);
+      setCurrentStep('day-selection');
+    } catch (err: any) {
+      setMealOptionsError(err.message || 'Failed to get meal options from AI');
+    } finally {
+      setMealOptionsLoading(false);
+    }
   };
+
 
   const handleDaySelectionNext = (day: string) => {
     setStartDay(day);
@@ -81,6 +123,9 @@ function App() {
                   onNext={handleMealSelectionNext}
                   onBack={handleBack}
                   userDailyMeals={userInfo?.dailyMeals || []}
+                  mealOptions={aiMealOptions || []}
+                  loading={mealOptionsLoading}
+                  error={mealOptionsError}
                 />
               )}
 

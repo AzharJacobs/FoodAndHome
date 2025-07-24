@@ -55,6 +55,14 @@ const MealDetails = () => {
         ← Back
       </button>
 
+      <div className="text-center mb-8">
+        <img 
+          src="/Food-Home-logo-2-1.png" 
+          alt="Food & Home" 
+          className="h-16 mx-auto mb-4"
+        />
+      </div>
+
       <h1 className="text-3xl font-bold mb-6 text-gray-800">{mealName}</h1>
 
       {loading ? (
