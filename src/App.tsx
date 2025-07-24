@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { UserInfo, MealOption } from './types';
+
 import BasicInfoForm from './components/BasicInfoForm';
 import DaySelection from './components/DaySelection';
 import MealSelection from './components/MealSelection';
 import GeneratedPlan from './components/GeneratedPlan';
 import IngredientsPage from './components/IngredientsPage';
+import MealDetails from './components/MealDetails';
 
 type Step = 'basic-info' | 'day-selection' | 'meal-selection' | 'generated-plan' | 'ingredients';
 
@@ -59,45 +62,55 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4">
-      {currentStep === 'basic-info' && (
-        <BasicInfoForm onNext={handleBasicInfoNext} />
-      )}
-      
-      {currentStep === 'day-selection' && (
-        <DaySelection 
-          onNext={handleDaySelectionNext}
-          onBack={handleBack}
+      <Routes>
+        {/* Main multi-step app */}
+        <Route
+          path="/"
+          element={
+            <>
+              {currentStep === 'basic-info' && (
+                <BasicInfoForm onNext={handleBasicInfoNext} />
+              )}
+
+              {currentStep === 'day-selection' && (
+                <DaySelection onNext={handleDaySelectionNext} onBack={handleBack} />
+              )}
+
+              {currentStep === 'meal-selection' && (
+                <MealSelection
+                  onNext={handleMealSelectionNext}
+                  onBack={handleBack}
+                  userDailyMeals={userInfo?.dailyMeals || []}
+                />
+              )}
+
+              {currentStep === 'generated-plan' && userInfo && (
+                <GeneratedPlan
+                  userInfo={userInfo}
+                  selectedMeals={selectedMeals}
+                  generatedMealPlan={generatedMealPlan}
+                  setGeneratedMealPlan={setGeneratedMealPlan}
+                  onBack={handleBack}
+                  onRegenerate={handleRegenerate}
+                  onViewIngredients={handleViewIngredients}
+                />
+              )}
+
+              {currentStep === 'ingredients' && userInfo && (
+                <IngredientsPage
+                  userInfo={userInfo}
+                  selectedMeals={selectedMeals}
+                  generatedMealPlan={generatedMealPlan}
+                  onBack={handleBack}
+                />
+              )}
+            </>
+          }
         />
-      )}
-      
-      {currentStep === 'meal-selection' && (
-        <MealSelection 
-          onNext={handleMealSelectionNext}
-          onBack={handleBack}
-          userDailyMeals={userInfo?.dailyMeals || []}
-        />
-      )}
-      
-      {currentStep === 'generated-plan' && userInfo && (
-        <GeneratedPlan 
-          userInfo={userInfo}
-          selectedMeals={selectedMeals}
-          generatedMealPlan={generatedMealPlan}
-          setGeneratedMealPlan={setGeneratedMealPlan}
-          onBack={handleBack}
-          onRegenerate={handleRegenerate}
-          onViewIngredients={handleViewIngredients}
-        />
-      )}
-      
-      {currentStep === 'ingredients' && userInfo && (
-        <IngredientsPage 
-          userInfo={userInfo}
-          selectedMeals={selectedMeals}
-          generatedMealPlan={generatedMealPlan}
-          onBack={handleBack}
-        />
-      )}
+
+        {/* AI-generated meal details view */}
+        <Route path="/meal/:mealName" element={<MealDetails />} />
+      </Routes>
     </div>
   );
 }

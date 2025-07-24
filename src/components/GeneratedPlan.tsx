@@ -3,6 +3,7 @@ import { ChevronLeft, Download, RefreshCw, Calendar, Target, Clock } from 'lucid
 import { UserInfo, MealOption, GeneratedMealPlan } from '../types';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Link } from 'react-router-dom';
 
 interface GeneratedPlanProps {
   userInfo: UserInfo;
@@ -307,7 +308,11 @@ export default function GeneratedPlan({ userInfo, selectedMeals, generatedMealPl
                       className="w-16 h-16 object-cover rounded-lg border border-gray-200"
                     />
                     <div className="flex-1">
-                      <div className="text-lg font-semibold text-black">{mealName}</div>
+                      <Link to={`/meal/${encodeURIComponent(mealName)}`}>
+                        <div className="text-lg font-semibold text-black hover:underline cursor-pointer">
+                          {mealName}
+                        </div>
+                      </Link>
                       <div className="text-sm text-gray-600 capitalize flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {mealType}
