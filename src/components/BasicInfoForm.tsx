@@ -67,12 +67,7 @@ export default function BasicInfoForm({ onNext, loading }: BasicInfoFormProps) {
       </div>
 
       <div className="flex border-b border-gray-200 mb-8">
-        <button className="px-6 py-3 border-b-2 border-black text-black font-semibold">
-          Basic
-        </button>
-        <button className="px-6 py-3 text-gray-500">
-          Advanced
-        </button>
+
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -252,10 +247,10 @@ export default function BasicInfoForm({ onNext, loading }: BasicInfoFormProps) {
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value as any }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
             >
-              <option value="low">$ Low</option>
-              <option value="medium">$$ Medium</option>
-              <option value="high">$$$ High</option>
-              <option value="premium">$$$$ Premium</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="premium">Premium</option>
             </select>
           </div>
         </div>

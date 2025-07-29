@@ -33,7 +33,24 @@ export default function MealSelection({ onNext, onBack, userDailyMeals, mealOpti
     
     const categoryMeals = mealOptions.filter(meal => meal.category === category);
     if (categoryMeals.length === 0) return null;
-    const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+    
+    // Updated category name mapping to handle new categories
+    const getCategoryDisplayName = (cat: string) => {
+      switch (cat) {
+        case 'breakfast':
+          return 'Breakfast';
+        case 'lunch':
+          return 'Lunch';
+        case 'dinner':
+          return 'Dinner';
+        case 'snack':
+          return 'Snacks';
+        default:
+          return cat.charAt(0).toUpperCase() + cat.slice(1);
+      }
+    };
+
+    const categoryName = getCategoryDisplayName(category);
 
     return (
       <div key={category} className="mb-12">
@@ -57,6 +74,11 @@ export default function MealSelection({ onNext, onBack, userDailyMeals, mealOpti
                   src={meal.image}
                   alt={meal.name}
                   className="w-full h-32 object-cover"
+                  onError={(e) => {
+                    // Fallback for broken images from Food & Home API
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-recipe.jpg'; // You'll need to add a placeholder image
+                  }}
                 />
                 <div className="p-3">
                   <h4 className="text-sm font-medium text-gray-900 leading-tight">{meal.name}</h4>
@@ -78,7 +100,7 @@ export default function MealSelection({ onNext, onBack, userDailyMeals, mealOpti
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center text-lg font-semibold">
-        Generating personalized meal options...
+        Loading recipes from Food & Home...
       </div>
     );
   }
@@ -129,7 +151,7 @@ export default function MealSelection({ onNext, onBack, userDailyMeals, mealOpti
           onClick={() => onNext(selectedMeals)}
           className="w-full bg-black text-white py-4 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-colors"
         >
-          Generate AI Meal Plan ({selectedMeals.length} meals selected)
+          Generate Meal Plan ({selectedMeals.length} meals selected)
         </button>
       </div>
     </div>
